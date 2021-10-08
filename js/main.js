@@ -8,27 +8,27 @@
 var STACK_SIZE = 100; // maximum size of undo stack
 
 var board = null;
-var $board = $('#myBoard');
+var $board = $("#myBoard");
 var game = new Chess();
 var globalSum = 0; // always from black's perspective. Negative for white's perspective.
-var whiteSquareGrey = '#a9a9a9';
-var blackSquareGrey = '#696969';
+var whiteSquareGrey = "#a9a9a9";
+var blackSquareGrey = "#696969";
 
-var squareClass = 'square-55d63';
+var squareClass = "square-55d63";
 var squareToHighlight = null;
 var colorToHighlight = null;
 var positionCount;
 
 var config = {
   draggable: true,
-  position: 'start',
+  position: "start",
   onDragStart: onDragStart,
   onDrop: onDrop,
   onMouseoutSquare: onMouseoutSquare,
   onMouseoverSquare: onMouseoverSquare,
   onSnapEnd: onSnapEnd,
 };
-board = Chessboard('myBoard', config);
+board = Chessboard("myBoard", config);
 
 timer = null;
 
@@ -113,13 +113,13 @@ var pst_w = {
   ],
 };
 var pst_b = {
-  p: pst_w['p'].slice().reverse(),
-  n: pst_w['n'].slice().reverse(),
-  b: pst_w['b'].slice().reverse(),
-  r: pst_w['r'].slice().reverse(),
-  q: pst_w['q'].slice().reverse(),
-  k: pst_w['k'].slice().reverse(),
-  k_e: pst_w['k_e'].slice().reverse(),
+  p: pst_w["p"].slice().reverse(),
+  n: pst_w["n"].slice().reverse(),
+  b: pst_w["b"].slice().reverse(),
+  r: pst_w["r"].slice().reverse(),
+  q: pst_w["q"].slice().reverse(),
+  k: pst_w["k"].slice().reverse(),
+  k_e: pst_w["k_e"].slice().reverse(),
 };
 
 var pstOpponent = { w: pst_b, b: pst_w };
@@ -130,9 +130,7 @@ var pstSelf = { w: pst_w, b: pst_b };
  * using the material weights and piece square tables.
  */
 function evaluateBoard(game, move, prevSum, color) {
-
   if (game.in_checkmate()) {
-
     // Opponent is in checkmate (good for us)
     if (move.color === color) {
       return 10 ** 10;
@@ -143,8 +141,7 @@ function evaluateBoard(game, move, prevSum, color) {
     }
   }
 
-  if (game.in_draw() || game.in_threefold_repetition() || game.in_stalemate())
-  {
+  if (game.in_draw() || game.in_threefold_repetition() || game.in_stalemate()) {
     return 0;
   }
 
@@ -161,17 +158,17 @@ function evaluateBoard(game, move, prevSum, color) {
 
   var from = [
     8 - parseInt(move.from[1]),
-    move.from.charCodeAt(0) - 'a'.charCodeAt(0),
+    move.from.charCodeAt(0) - "a".charCodeAt(0),
   ];
   var to = [
     8 - parseInt(move.to[1]),
-    move.to.charCodeAt(0) - 'a'.charCodeAt(0),
+    move.to.charCodeAt(0) - "a".charCodeAt(0),
   ];
 
   // Change endgame behavior for kings
   if (prevSum < -1500) {
-    if (move.piece === 'k') {
-      move.piece = 'k_e';
+    if (move.piece === "k") {
+      move.piece = "k_e";
     }
     // Kings can never be captured
     // else if (move.captured === 'k') {
@@ -179,7 +176,7 @@ function evaluateBoard(game, move, prevSum, color) {
     // }
   }
 
-  if ('captured' in move) {
+  if ("captured" in move) {
     // Opponent piece was captured (good for us)
     if (move.color === color) {
       prevSum +=
@@ -194,9 +191,9 @@ function evaluateBoard(game, move, prevSum, color) {
     }
   }
 
-  if (move.flags.includes('p')) {
+  if (move.flags.includes("p")) {
     // NOTE: promote to queen for simplicity
-    move.promotion = 'q';
+    move.promotion = "q";
 
     // Our piece was promoted (good for us)
     if (move.color === color) {
@@ -315,20 +312,20 @@ function minimax(game, depth, alpha, beta, isMaximizingPlayer, sum, color) {
 
 function checkStatus(color) {
   if (game.in_checkmate()) {
-    $('#status').html(`<b>Checkmate!</b> Oops, <b>${color}</b> lost.`);
+    $("#status").html(`<b>Checkmate!</b> Oops, <b>${color}</b> lost.`);
   } else if (game.insufficient_material()) {
-    $('#status').html(`It's a <b>draw!</b> (Insufficient Material)`);
+    $("#status").html(`It's a <b>draw!</b> (Insufficient Material)`);
   } else if (game.in_threefold_repetition()) {
-    $('#status').html(`It's a <b>draw!</b> (Threefold Repetition)`);
+    $("#status").html(`It's a <b>draw!</b> (Threefold Repetition)`);
   } else if (game.in_stalemate()) {
-    $('#status').html(`It's a <b>draw!</b> (Stalemate)`);
+    $("#status").html(`It's a <b>draw!</b> (Stalemate)`);
   } else if (game.in_draw()) {
-    $('#status').html(`It's a <b>draw!</b> (50-move Rule)`);
+    $("#status").html(`It's a <b>draw!</b> (50-move Rule)`);
   } else if (game.in_check()) {
-    $('#status').html(`Oops, <b>${color}</b> is in <b>check!</b>`);
+    $("#status").html(`Oops, <b>${color}</b> is in <b>check!</b>`);
     return false;
   } else {
-    $('#status').html(`No check, checkmate, or draw.`);
+    $("#status").html(`No check, checkmate, or draw.`);
     return false;
   }
   return true;
@@ -336,17 +333,17 @@ function checkStatus(color) {
 
 function updateAdvantage() {
   if (globalSum > 0) {
-    $('#advantageColor').text('Black');
-    $('#advantageNumber').text(globalSum);
+    $("#advantageColor").text("Black");
+    $("#advantageNumber").text(globalSum);
   } else if (globalSum < 0) {
-    $('#advantageColor').text('White');
-    $('#advantageNumber').text(-globalSum);
+    $("#advantageColor").text("White");
+    $("#advantageNumber").text(-globalSum);
   } else {
-    $('#advantageColor').text('Neither side');
-    $('#advantageNumber').text(globalSum);
+    $("#advantageColor").text("Neither side");
+    $("#advantageNumber").text(globalSum);
   }
-  $('#advantageBar').attr({
-    'aria-valuenow': `${-globalSum}`,
+  $("#advantageBar").attr({
+    "aria-valuenow": `${-globalSum}`,
     style: `width: ${((-globalSum + 2000) / 4000) * 100}%`,
   });
 }
@@ -357,10 +354,10 @@ function updateAdvantage() {
 function getBestMove(game, color, currSum) {
   positionCount = 0;
 
-  if (color === 'b') {
-    var depth = parseInt($('#search-depth').find(':selected').text());
+  if (color === "b") {
+    var depth = parseInt($("#search-depth").find(":selected").text());
   } else {
-    var depth = parseInt($('#search-depth-white').find(':selected').text());
+    var depth = parseInt($("#search-depth-white").find(":selected").text());
   }
 
   var d = new Date().getTime();
@@ -377,9 +374,9 @@ function getBestMove(game, color, currSum) {
   var moveTime = d2 - d;
   var positionsPerS = (positionCount * 1000) / moveTime;
 
-  $('#position-count').text(positionCount);
-  $('#time').text(moveTime / 1000);
-  $('#positions-per-s').text(Math.round(positionsPerS));
+  $("#position-count").text(positionCount);
+  $("#time").text(moveTime / 1000);
+  $("#positions-per-s").text(Math.round(positionsPerS));
 
   return [bestMove, bestMoveValue];
 }
@@ -388,42 +385,42 @@ function getBestMove(game, color, currSum) {
  * Makes the best legal move for the given color.
  */
 function makeBestMove(color) {
-  if (color === 'b') {
+  if (color === "b") {
     var move = getBestMove(game, color, globalSum)[0];
   } else {
     var move = getBestMove(game, color, -globalSum)[0];
   }
 
-  globalSum = evaluateBoard(game, move, globalSum, 'b');
+  globalSum = evaluateBoard(game, move, globalSum, "b");
   updateAdvantage();
 
   game.move(move);
   board.position(game.fen());
 
-  if (color === 'b') {
-    checkStatus('black');
+  if (color === "b") {
+    checkStatus("black");
 
     // Highlight black move
-    $board.find('.' + squareClass).removeClass('highlight-black');
-    $board.find('.square-' + move.from).addClass('highlight-black');
+    $board.find("." + squareClass).removeClass("highlight-black");
+    $board.find(".square-" + move.from).addClass("highlight-black");
     squareToHighlight = move.to;
-    colorToHighlight = 'black';
+    colorToHighlight = "black";
 
     $board
-      .find('.square-' + squareToHighlight)
-      .addClass('highlight-' + colorToHighlight);
+      .find(".square-" + squareToHighlight)
+      .addClass("highlight-" + colorToHighlight);
   } else {
-    checkStatus('white');
+    checkStatus("white");
 
     // Highlight white move
-    $board.find('.' + squareClass).removeClass('highlight-white');
-    $board.find('.square-' + move.from).addClass('highlight-white');
+    $board.find("." + squareClass).removeClass("highlight-white");
+    $board.find(".square-" + move.from).addClass("highlight-white");
     squareToHighlight = move.to;
-    colorToHighlight = 'white';
+    colorToHighlight = "white";
 
     $board
-      .find('.square-' + squareToHighlight)
-      .addClass('highlight-' + colorToHighlight);
+      .find(".square-" + squareToHighlight)
+      .addClass("highlight-" + colorToHighlight);
   }
 }
 
@@ -431,13 +428,13 @@ function makeBestMove(color) {
  * Plays Computer vs. Computer, starting with a given color.
  */
 function compVsComp(color) {
-  if (!checkStatus({ w: 'white', b: 'black' }[color])) {
+  if (!checkStatus({ w: "white", b: "black" }[color])) {
     timer = window.setTimeout(function () {
       makeBestMove(color);
-      if (color === 'w') {
-        color = 'b';
+      if (color === "w") {
+        color = "b";
       } else {
-        color = 'w';
+        color = "w";
       }
       compVsComp(color);
     }, 250);
@@ -450,12 +447,12 @@ function compVsComp(color) {
 function reset() {
   game.reset();
   globalSum = 0;
-  $board.find('.' + squareClass).removeClass('highlight-white');
-  $board.find('.' + squareClass).removeClass('highlight-black');
-  $board.find('.' + squareClass).removeClass('highlight-hint');
+  $board.find("." + squareClass).removeClass("highlight-white");
+  $board.find("." + squareClass).removeClass("highlight-black");
+  $board.find("." + squareClass).removeClass("highlight-hint");
   board.position(game.fen());
-  $('#advantageColor').text('Neither side');
-  $('#advantageNumber').text(globalSum);
+  $("#advantageColor").text("Neither side");
+  $("#advantageNumber").text(globalSum);
 
   // Kill the Computer vs. Computer callback
   if (timer) {
@@ -467,42 +464,130 @@ function reset() {
 /*
  * Event listeners for various buttons.
  */
-$('#ruyLopezBtn').on('click', function () {
+$("#ruyLopezBtn").on("click", function () {
   reset();
   game.load(
-    'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1'
+    "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1"
   );
   board.position(game.fen());
   window.setTimeout(function () {
-    makeBestMove('b');
+    makeBestMove("b");
   }, 250);
 });
-$('#italianGameBtn').on('click', function () {
+$("#italianGameBtn").on("click", function () {
   reset();
   game.load(
-    'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1'
+    "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 1"
   );
   board.position(game.fen());
   window.setTimeout(function () {
-    makeBestMove('b');
+    makeBestMove("b");
   }, 250);
 });
-$('#sicilianDefenseBtn').on('click', function () {
+$("#sicilianDefenseBtn").on("click", function () {
   reset();
-  game.load('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1');
+  game.load("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1");
   board.position(game.fen());
 });
-$('#startBtn').on('click', function () {
+$("#startBtn").on("click", function () {
   reset();
 });
 
-$('#compVsCompBtn').on('click', function () {
+$("#compVsCompBtn").on("click", function () {
   reset();
-  compVsComp('w');
+  compVsComp("w");
 });
-$('#resetBtn').on('click', function () {
+$("#resetBtn").on("click", function () {
   reset();
 });
+
+//////////////////////////////////////////////////////////////
+$("#start960").on("click", function () {
+  reset();
+  let starterPieces = ["p", "p", "p", "p", "p", "p", "p", "p"];
+  let rooksAdded = rookLogic(starterPieces);
+  let kingAdded = kingLogic(rooksAdded);
+  console.log(kingAdded);
+
+  ////Adds all pieces
+  //console.log(kingAdded.join().toString().replaceAll(",", ""));
+
+  game.load(
+    `${testLogic()}/pppppppp/8/8/8/8/PPPPPPPP/${testLogic2()} w KQkq - 0 1`
+  );
+  board.position(game.fen());
+});
+
+function rookLogic(rankPieces) {
+  let firstRookPosition = getRandomInt(8);
+  let secondRookPosition = getRandomInt(firstRookPosition);
+  let incorrectPosition = true;
+
+  while (incorrectPosition) {
+    if (
+      firstRookPosition === secondRookPosition ||
+      firstRookPosition - 1 === secondRookPosition
+    ) {
+      firstRookPosition = getRandomInt(8);
+      secondRookPosition = getRandomInt(firstRookPosition);
+    } else {
+      incorrectPosition = false;
+    }
+  }
+
+  let newArr = [...rankPieces];
+  newArr.forEach((p, index) => {
+    if (index === firstRookPosition || index === secondRookPosition) {
+      newArr[index] = "r";
+    }
+  });
+
+  return newArr;
+}
+
+function kingLogic(rankPieces) {
+  let rookIndexLocations = [];
+  rankPieces.forEach((v, index) => {
+    if (v === "r") {
+      rookIndexLocations.push(index);
+    }
+  });
+
+  let kingPosition = getRandomIntRange(
+    rookIndexLocations[0] + 1,
+    rookIndexLocations[1]
+  );
+
+  rankPieces[kingPosition] = "k";
+  return rankPieces;
+}
+
+function bishopLogic(rankPieces) {}
+
+function restOfPiecesLogic(rankPieces) {}
+
+function mirrorLogic(rankPieces) {}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function getRandomIntRange(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+////UNIT TESTING
+function testLogic2() {
+  return "NRBQKBRN";
+}
+
+function testLogic() {
+  return "nrbqkbrn";
+}
+
+/////////////////////////////////////////////////////////////
 
 var undo_stack = [];
 
@@ -517,11 +602,11 @@ function undo() {
   board.position(game.fen());
 }
 
-$('#undoBtn').on('click', function () {
+$("#undoBtn").on("click", function () {
   if (game.history().length >= 2) {
-    $board.find('.' + squareClass).removeClass('highlight-white');
-    $board.find('.' + squareClass).removeClass('highlight-black');
-    $board.find('.' + squareClass).removeClass('highlight-hint');
+    $board.find("." + squareClass).removeClass("highlight-white");
+    $board.find("." + squareClass).removeClass("highlight-black");
+    $board.find("." + squareClass).removeClass("highlight-hint");
 
     // Undo twice: Opponent's latest move, followed by player's latest move
     undo();
@@ -532,7 +617,7 @@ $('#undoBtn').on('click', function () {
       }, 250);
     }, 250);
   } else {
-    alert('Nothing to undo.');
+    alert("Nothing to undo.");
   }
 });
 
@@ -541,7 +626,7 @@ function redo() {
   board.position(game.fen());
 }
 
-$('#redoBtn').on('click', function () {
+$("#redoBtn").on("click", function () {
   if (undo_stack.length >= 2) {
     // Redo twice: Player's last move, followed by opponent's last move
     redo();
@@ -552,24 +637,24 @@ $('#redoBtn').on('click', function () {
       }, 250);
     }, 250);
   } else {
-    alert('Nothing to redo.');
+    alert("Nothing to redo.");
   }
 });
 
-$('#showHint').change(function () {
+$("#showHint").change(function () {
   window.setTimeout(showHint, 250);
 });
 
 function showHint() {
-  var showHint = document.getElementById('showHint');
-  $board.find('.' + squareClass).removeClass('highlight-hint');
+  var showHint = document.getElementById("showHint");
+  $board.find("." + squareClass).removeClass("highlight-hint");
 
   // Show hint (best move for white)
   if (showHint.checked) {
-    var move = getBestMove(game, 'w', -globalSum)[0];
+    var move = getBestMove(game, "w", -globalSum)[0];
 
-    $board.find('.square-' + move.from).addClass('highlight-hint');
-    $board.find('.square-' + move.to).addClass('highlight-hint');
+    $board.find(".square-" + move.from).addClass("highlight-hint");
+    $board.find(".square-" + move.to).addClass("highlight-hint");
   }
 }
 
@@ -578,18 +663,18 @@ function showHint() {
  * https://chessboardjs.com/examples#5000
  */
 function removeGreySquares() {
-  $('#myBoard .square-55d63').css('background', '');
+  $("#myBoard .square-55d63").css("background", "");
 }
 
 function greySquare(square) {
-  var $square = $('#myBoard .square-' + square);
+  var $square = $("#myBoard .square-" + square);
 
   var background = whiteSquareGrey;
-  if ($square.hasClass('black-3c85d')) {
+  if ($square.hasClass("black-3c85d")) {
     background = blackSquareGrey;
   }
 
-  $square.css('background', background);
+  $square.css("background", background);
 }
 
 function onDragStart(source, piece) {
@@ -598,8 +683,8 @@ function onDragStart(source, piece) {
 
   // or if it's not that side's turn
   if (
-    (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-    (game.turn() === 'b' && piece.search(/^w/) !== -1)
+    (game.turn() === "w" && piece.search(/^b/) !== -1) ||
+    (game.turn() === "b" && piece.search(/^w/) !== -1)
   ) {
     return false;
   }
@@ -613,31 +698,31 @@ function onDrop(source, target) {
   var move = game.move({
     from: source,
     to: target,
-    promotion: 'q', // NOTE: always promote to a queen for example simplicity
+    promotion: "q", // NOTE: always promote to a queen for example simplicity
   });
 
   // Illegal move
-  if (move === null) return 'snapback';
+  if (move === null) return "snapback";
 
-  globalSum = evaluateBoard(game, move, globalSum, 'b');
+  globalSum = evaluateBoard(game, move, globalSum, "b");
   updateAdvantage();
 
   // Highlight latest move
-  $board.find('.' + squareClass).removeClass('highlight-white');
+  $board.find("." + squareClass).removeClass("highlight-white");
 
-  $board.find('.square-' + move.from).addClass('highlight-white');
+  $board.find(".square-" + move.from).addClass("highlight-white");
   squareToHighlight = move.to;
-  colorToHighlight = 'white';
+  colorToHighlight = "white";
 
   $board
-    .find('.square-' + squareToHighlight)
-    .addClass('highlight-' + colorToHighlight);
+    .find(".square-" + squareToHighlight)
+    .addClass("highlight-" + colorToHighlight);
 
-  if (!checkStatus('black'));
+  if (!checkStatus("black"));
   {
     // Make the best move for black
     window.setTimeout(function () {
-      makeBestMove('b');
+      makeBestMove("b");
       window.setTimeout(function () {
         showHint();
       }, 250);
