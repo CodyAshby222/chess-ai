@@ -484,11 +484,11 @@ $("#italianGameBtn").on("click", function () {
     makeBestMove("b");
   }, 250);
 });
-$("#sicilianDefenseBtn").on("click", function () {
-  reset();
-  game.load("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1");
-  board.position(game.fen());
-});
+// $("#sicilianDefenseBtn").on("click", function () {
+//   reset();
+//   game.load("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1");
+//   board.position(game.fen());
+// });
 $("#startBtn").on("click", function () {
   reset();
 });

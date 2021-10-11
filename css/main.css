@@ -32,3 +32,77 @@
   font-size: 20px;
   font-weight: bold;
 }
+
+/* Cody Ashby - Additional Styles */
+
+body {
+  background: url(../img/background/wood-bg.jpg);
+  color: white;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+#main-page {
+  width: 900px;
+}
+
+.btn {
+  border-radius: 100vh;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+}
+
+button.no-outline {
+  border: none;
+  background-color: transparent;
+  font-family: "Old Standard TT", serif;
+  font-weight: 600;
+  color: white !important;
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
+.bg-primary {
+  background-color: #ffffff !important;
+}
+
+.progress {
+  background-color: #000;
+  border: 2px solid grey;
+}
+
+#testBtn {
+  font-family: "Old Standard TT", serif;
+  font-size: 60px;
+  font-weight: 500;
+  border-bottom: 3px solid white;
+}
+
+.card-header {
+  background-color: #b18860;
+}
+
+.card-body {
+  background-color: #eed9b3 !important;
+}
+
+.progress-bar-vertical {
+  transform: rotate(0.75turn) translate(-280px, -300px);
+}
+
+.btn-primary {
+  background-color: rgb(16, 82, 204) !important;
+}
+
+.btn-success {
+  background-color: rgb(11, 131, 27) !important;
+}
+
+.btn-danger {
+  background-color: rgb(179, 10, 10) !important;
+}
