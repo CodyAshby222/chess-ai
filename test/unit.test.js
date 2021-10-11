@@ -35,29 +35,126 @@ const incorrectAmount = (incorrect) => {
 };
 
 //Checks to make sure rookKing Placements
-const rookKingSuccess = (correct) => {};
+const rookKingSuccess = (correct) => {
+  let arr = correct.split("");
+  let tempArr = [];
+  arr.forEach((value, index) => {
+    if (value === "r" || value === "k") {
+      tempArr.push(arr[index]);
+    }
+  });
+  let rookKings = tempArr.join().toString().replaceAll(",", "");
+  return rookKings === "rkr" ? true : false;
+};
 
-const rookKingFailure = (incorrect) => {};
+const rookKingFailure = (incorrect) => {
+  let arr = incorrect.split("");
+  let tempArr = [];
+  arr.forEach((value, index) => {
+    if (value === "r" || value === "k") {
+      tempArr.push(arr[index]);
+    }
+  });
+  let rookKings = tempArr.join().toString().replaceAll(",", "");
+  return rookKings !== "rkr" ? true : false;
+};
 
 //Checks bishop placements
-const bishopSuccess = () => {};
+const bishopSuccess = (correct) => {
+  let arr = correct.split("");
+  let num = 0;
+  arr.forEach((value, index) => {
+    if (value === "b") {
+      num += index;
+    }
+  });
+  return num % 2 === 1 ? true : false;
+};
 
-const bishopFailure = () => {};
+const bishopFailure = (incorrect) => {
+  let arr = incorrect.split("");
+  let num = 0;
+  arr.forEach((value, index) => {
+    if (value === "b") {
+      num += index;
+    }
+  });
+  return num % 2 === 0 ? true : false;
+};
 
 //checks rest of pieces placements
-const queenKnightSuccess = () => {};
+const queenKnightSuccess = (correct) => {
+  let arr = correct.split("");
+  let tempArr = [];
+  arr.forEach((value, index) => {
+    if (value === "n" || value === "q") {
+      tempArr.push(arr[index]);
+    }
+  });
+  let queenKnight = tempArr.join().toString().replaceAll(",", "");
+  if (queenKnight === "qnn" || queenKnight === "nqn" || queenKnight === "nnq") {
+    return true;
+  }
+  return false;
+};
 
-const queenKnightFailure = () => {};
+const queenKnightFailure = (incorrect) => {
+  let arr = incorrect.split("");
+  let tempArr = [];
+  arr.forEach((value, index) => {
+    if (value === "n" || value === "q") {
+      tempArr.push(arr[index]);
+    }
+  });
+  let queenKnight = tempArr.join().toString().replaceAll(",", "");
+  if (queenKnight === "qnn" || queenKnight === "nqn" || queenKnight === "nnq") {
+    return false;
+  }
+  return true;
+};
 
 //checks all ranks are correct
-const allPiecesSuccess = () => {};
+const allPiecesSuccess = (correct) => {
+  if (
+    correctAmount(correct) &&
+    rookKingSuccess(correct) &&
+    bishopSuccess(correct) &&
+    queenKnightSuccess(correct)
+  ) {
+    return true;
+  }
+  return false;
+};
 
-const allPiecesFailure = () => {};
+const allPiecesFailure = (incorrect) => {
+  if (
+    incorrectAmount(incorrect) ||
+    rookKingFailure(incorrect) ||
+    bishopFailure(incorrect) ||
+    queenKnightFailure(incorrect)
+  ) {
+    return true;
+  }
+  return false;
+};
 
 //Output of Unit Tests Results in console
 const allUnitTestResults = (correct) => {
-  console.log("--ALL UNIT TESTS--");
+  console.log("--- ALL UNIT TESTS ---");
   console.log("Correct Length Test: ", correctAmount(correct));
   console.log("Incorrect Length Test: ", incorrectAmount(incorrectRanks));
+  console.log("");
+  console.log("Correct Rook&King Test: ", rookKingSuccess(correct));
+  console.log("Incorrect Rook&King Test: ", rookKingFailure(incorrectRanks));
+  console.log("");
+  console.log("Correct Bishop Test: ", bishopSuccess(correct));
+  console.log("Incorrect Bishop Test: ", bishopFailure(incorrectRanks));
+  console.log("");
+  console.log("Correct Q&Knight Test: ", queenKnightSuccess(correct));
+  console.log("Incorrect Q&Knight Test: ", queenKnightFailure(incorrectRanks));
+  console.log("");
+  console.log("All Correct Rank Placements: ", allPiecesSuccess(correct));
+  console.log("Incorrect Rank Placements: ", allPiecesFailure(incorrectRanks));
+  console.log("----------------------------");
   console.log("");
 };
